@@ -1,9 +1,14 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { SplitText } from "gsap/all";
-import React from "react";
+import { SplitText, ScrollTrigger } from "gsap/all";
+import React, { useRef } from "react";
+import { useMediaQuery } from "react-responsive";
 
 const Hero = () => {
+  const videoRef = useRef();
+
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+
   useGSAP(() => {
     const heroSplit = new SplitText(".title", { type: "chars, words" });
     const paragraphSpilit = new SplitText(".subtitle", { type: "lines" });
@@ -49,42 +54,82 @@ const Hero = () => {
         },
         "0",
       );
-  }, []);
+
+    const startValue = isMobile ? "top 50%" : "center 60%";
+    const endValue = isMobile ? "120% top" : "bottom top";
+
+    const video = videoRef.current;
+    if (video) {
+      const initVideoAnimation = () => {
+        ScrollTrigger.create({
+          trigger: video,
+          start: startValue,
+          end: endValue,
+          scrub: 1,
+          ease: "power1.out",
+          pin: true,
+          onUpdate: (self) => {
+            if (video.duration) {
+              video.currentTime = self.progress * video.duration;
+            }
+          },
+        });
+      };
+
+      if (video.readyState >= 1) {
+        initVideoAnimation();
+      } else {
+        video.onloadedmetadata = initVideoAnimation;
+      }
+    }
+  }, [isMobile]);
 
   return (
-    <section id="hero" className="noisy">
-      <h1 className="title">MOJITO</h1>
-      <img
-        className="left-leaf"
-        src="/images/hero-left-leaf.png"
-        alt="left-leaf"
-      />
-      <img
-        className="right-leaf"
-        src="/images/hero-right-leaf.png"
-        alt="right-leaf"
-      />
+    <>
+      <div className="video absolute inset-0">
+        <video
+          ref={videoRef}
+          src="/videos/input.mp4"
+          muted
+          playsInline
+          preload="auto"
+        />
+      </div>
 
-      <div className="body">
-        <div className="content">
-          <div className="space-y-5 hidden md:block">
-            <p>Cool. Crisp. Classic.</p>
-            <p className="subtitle">
-              sip the spirit <br /> of summer
-            </p>
-          </div>
+      <section id="hero" className="noisy">
+        <h1 className="title">MOJITO</h1>
+        <img
+          className="left-leaf"
+          src="/images/hero-left-leaf.png"
+          alt="left-leaf"
+        />
+        <img
+          className="right-leaf"
+          src="/images/hero-right-leaf.png"
+          alt="right-leaf"
+        />
 
-          <div className="view-cocktails">
-            <p className="subtitle">
-              Every cocktail on our menu is a blend of premium ingredients,
-              creative flair, and timeless recipes – designed to delight your
-              senses.
-            </p>
-            <a href="#cocktails">View Cocktails</a>
+        <div className="body">
+          <div className="content">
+            <div className="space-y-5 hidden md:block">
+              <p>Cool. Crisp. Classic.</p>
+              <p className="subtitle">
+                sip the spirit <br /> of summer
+              </p>
+            </div>
+
+            <div className="view-cocktails">
+              <p className="subtitle">
+                Every cocktail on our menu is a blend of premium ingredients,
+                creative flair, and timeless recipes – designed to delight your
+                senses.
+              </p>
+              <a href="#cocktails">View Cocktails</a>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
