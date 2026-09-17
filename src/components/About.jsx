@@ -14,13 +14,25 @@ const About = () => {
       },
     });
 
-    scrollTimeLine.from(titleSplit.words, {
-      opacity: 0,
-      yPercent: 100,
-      stagger: 0.1,
-      duration: 1,
-      ease: "power2.out",
-    });
+    scrollTimeLine
+      .from(titleSplit.words, {
+        opacity: 0,
+        yPercent: 100,
+        stagger: 0.02,
+        duration: 1,
+        ease: "expo.out",
+      })
+      .from(
+        ".top-grid > div, .bottom-grid > div",
+        {
+          opacity: 0,
+          yPercent: 100,
+          stagger: 0.04,
+          duration: 1,
+          ease: "power1.out",
+        },
+        "-=0.5",
+      );
   }, []);
 
 
