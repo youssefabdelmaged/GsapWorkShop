@@ -56,7 +56,7 @@ const Hero = () => {
       );
 
     const startValue = isMobile ? "top 50%" : "center 60%";
-    const endValue = isMobile ? "120% top" : "bottom top";
+    const endValue = isMobile ? "bottom -19%" : "bottom top";
 
     const video = videoRef.current;
     if (video) {
