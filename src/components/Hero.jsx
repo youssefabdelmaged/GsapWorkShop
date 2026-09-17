@@ -7,7 +7,7 @@ import { useMediaQuery } from "react-responsive";
 const Hero = () => {
   const videoRef = useRef();
 
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 900 });
 
   useGSAP(() => {
     const heroSplit = new SplitText(".title", { type: "chars, words" });
@@ -56,7 +56,7 @@ const Hero = () => {
       );
 
     const startValue = isMobile ? "top 50%" : "center 60%";
-    const endValue = isMobile ? "bottom -19%" : "bottom top";
+    const endValue = isMobile ? "bottom -7%" : "bottom top";
 
     const video = videoRef.current;
     if (video) {
